@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// This is a pipeline program that uses channels to orchestrate the processing of some arbitrary work
+
 func main() {
 
 	// main goroutine.
@@ -14,6 +16,9 @@ func main() {
 	// produce numbers and add them to the channel
 	go func() {
 		for i := 1; i <= 10; i++ {
+
+			// the goroutine blocks here until a receive operation is performed
+			// to the same channel
 			naturals <- i
 		}
 
@@ -27,7 +32,13 @@ func main() {
 	// drain the naturals channel and add
 	// result of calculation to squares channel
 	go func() {
+
+		// the range is causing a receive operation, so the goroutine
+		// which sends to the naturals channel can unblock
 		for n := range naturals {
+
+			// the goroutine blocks here until a recieve is performed
+			// to the same channel
 			squares <- n * n
 		}
 
@@ -39,8 +50,15 @@ func main() {
 
 	// main goroutine
 
-	// drain the squares channel and terminate
+	// the range is causing a receive operation so the goroutine
+	// which sends to the squares channel can unblock
 	for i := range squares {
+
+		// the main goroutine blocks here until a send is performed
+		// to the squares channel
 		fmt.Println(i)
 	}
+
+	// the main goroutine ends as the squares channel is closed.
+	// recall range on channel happens until it is closed.
 }
