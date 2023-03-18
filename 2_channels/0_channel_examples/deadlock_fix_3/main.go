@@ -36,4 +36,6 @@ func main() {
 
 	A channel that the garbage collector determines to be unreachable will have its resources reclaimed whether
 	closed or not.
+
+	Subsequent calls to a closed channel yield the channel's zero value, ie chan int will return 0.
 */
