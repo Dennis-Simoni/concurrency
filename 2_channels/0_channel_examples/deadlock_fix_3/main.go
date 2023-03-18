@@ -29,3 +29,11 @@ func main() {
 
 	// main returns
 }
+
+/*
+	It is not necessary to close every channel when we are finished with it, it is only necessary to close a
+	channel when it is important to tell the receiving goroutines that all data has been sent.
+
+	A channel that the garbage collector determines to be unreachable will have its resources reclaimed whether
+	closed or not.
+*/
